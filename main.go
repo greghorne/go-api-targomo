@@ -99,15 +99,6 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			",'id':'Mappy','tm':{'car':{}}}],'polygon':" +
 			"{'serializer':'geojson','srid':'4326'," +
 			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + r360_key
-		
-		// https://service.route360.net/na_northeast/v1/polygon?cfg={'sources':[{'lat':36.153980,'lng':-95.79743364,'id':'Mappy','tm':{'car':{}}}],'polygon':{'serializer':'geojson','srid':'4326','values':[180], 'buffer':.002,'quadrantSegments':8}}&key=GYSWOYA0HD8JM1LAJYDX
-
-		// r360_url := "https://service.route360.net/na_northeast/v1/polygon?cfg={'sources':[{'lat':36.153980,'lng':-95.79743364,'id':'Mappy','tm':{'car':{}}}],'polygon':{'serializer':'geojson','srid':'4326','values':[180]}}&key=GYSWOYA0HD8JM1LAJYDX"
-
-		fmt.Println(r360_url)
-		fmt.Println("")
-		
-
 
 		response, err := http.Get(r360_url)
 		if err == nil {
@@ -115,34 +106,25 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 
 			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {} 
-			// var data map[string]interface{}
-			fmt.Println("body=====")
-			fmt.Println(string(body))
-			text := string(body)
 
-			nGeometry := strings.Index(text, "geometry")
-			fmt.Println(nGeometry)
-			// json.Unmarshal([]byte(body), &data)
+			fmt.Println("myText=====")
+			myText := string(body)
+			fmt.Println(myText)
 
-			// fmt.Println("")
-			// fmt.Println("data =====")
-			// fmt.Println(data["data"])
-			// fmt.Println("features====")
-			// fmt.Println(data["features"])
+			fmt.Println("=====")
+			nStart := strings.Index(myText, "geometry\":") + len("geometry\":")
+			nEnd := strings.Index(myText, ",\"properties\":{\"time\"")
+fmt.Println(nStart, nEnd, len(myText))
+			myText2 := myText[nStart:nEnd]
+			fmt.Println(myText2)
 
-			// var f interface{}
-			// json.Unmarshal(body, &f)
-			// m := f.(map[string]interface{})
-			// fmt.Println("m =====")
-			// fmt.Println(m)
+// fmt.Println(len(text), nEnd)
+// fmt.Println(nStart + len("geometry\":"), len(text) - nEnd)
 
-			// fmt.Println("s =====")
-			// s := string([]byte(body)[:])
-			// fmt.Println(s)
-			// fmt.Println(len([]rune(s)))
+// text2 := text[nStart + len("geometry\":"):]
+// 			text3 := text2[:len(text2) - nEnd]
+// 			fmt.Println(text3)
 
-			// decoder := json.NewDecoder(response.Body)
-			// fmt.Println(decoder)
 
 
 		} else {
