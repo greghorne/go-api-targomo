@@ -16,7 +16,7 @@ func main() {
 	
 	router := mux.NewRouter()
 	router.HandleFunc("/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}", v1TargomoIsochrone).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8001", router))
 }
 // ============================================================
 
