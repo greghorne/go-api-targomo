@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/mux"
-	"os"
 	"io/ioutil"
 	"encoding/json"
 	"strconv"
@@ -80,13 +79,13 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 
 	if region, error_msg := getRegion(sxLng, syLat); error_msg == "" { 
 	
-		r360_key := os.Getenv("TARGOMO")
+		// r360_key := os.Getenv("TARGOMO")
     	r360_url := "https://service.route360.net/na_" +
 			region + "/v1/polygon?cfg={'sources':[{'lat':" + 
 			syLat + ",'lng':" + sxLng + 
 			",'id':'Mappy','tm':{'car':{}}}],'polygon':" +
 			"{'serializer':'geojson','srid':'4326'," +
-			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + r360_key
+			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + sKey
 		
 		startSearchText := "geometry\":"
 		endSearchText   := ",\"properties\":{\"time\""
