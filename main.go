@@ -7,11 +7,12 @@ import (
 	// _ "github.com/lib/pq"
 	"os"
 	// "database/sql"
-	// "io/ioutil"
+	"io/ioutil"
 	"encoding/json"
 	"strconv"
 	"fmt"
 )
+
 
 // ============================================================
 func main() {
@@ -88,6 +89,7 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 	fmt.Println("v1DoTargomoIsochrone...")
 
 	if region, error_msg := getRegion(sxLng, syLat); error_msg == "" { 
+	
 
 		r360_key := os.Getenv("TARGOMO")
 
@@ -97,14 +99,38 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			",'id':'Mappy','tm':{'car':{}}}],'polygon':" +
 			"{'serializer':'geojson','srid':'4326'," +
 			"'values':[" + sTime + "]}}&key=" + r360_key
+
 		fmt.Println(r360_url)
+		fmt.Println("")
+		
+
 
 		response, err := http.Get(r360_url)
 		if err == nil {
 			defer response.Body.Close()
-			fmt.Println(json.NewDecoder(response.Body))
-			// polygons = string(jsonReturned)
-			// msg = ""
+
+			body, err := ioutil.ReadAll(response.Body)
+			if err != nil {}
+			var data map[string]interface{}
+			fmt.Println("body=====")
+			fmt.Println(string(body))
+			json.Unmarshal([]byte(body), &data)
+
+			fmt.Println("")
+			fmt.Println("data =====")
+			fmt.Println(data["data"])
+			fmt.Println("features====")
+			fmt.Println(data["features"])
+
+			// fmt.Println("s =====")
+			// s := string([]byte(body)[:])
+			// fmt.Println(s)
+			// fmt.Println(len([]rune(s)))
+
+			// decoder := json.NewDecoder(response.Body)
+			// fmt.Println(decoder)
+
+
 		} else {
 			fmt.Println(err)
 			polygons = ""
