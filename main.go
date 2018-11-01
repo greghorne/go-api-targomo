@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"strconv"
 	"fmt"
+	"strings"
 )
 
 
@@ -90,7 +91,6 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 
 	if region, error_msg := getRegion(sxLng, syLat); error_msg == "" { 
 	
-
 		r360_key := os.Getenv("TARGOMO")
 
     	r360_url := "https://service.route360.net/na_" +
@@ -98,7 +98,11 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			syLat + ",'lng':" + sxLng + 
 			",'id':'Mappy','tm':{'car':{}}}],'polygon':" +
 			"{'serializer':'geojson','srid':'4326'," +
-			"'values':[" + sTime + "]}}&key=" + r360_key
+			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + r360_key
+		
+		// https://service.route360.net/na_northeast/v1/polygon?cfg={'sources':[{'lat':36.153980,'lng':-95.79743364,'id':'Mappy','tm':{'car':{}}}],'polygon':{'serializer':'geojson','srid':'4326','values':[180], 'buffer':.002,'quadrantSegments':8}}&key=GYSWOYA0HD8JM1LAJYDX
+
+		// r360_url := "https://service.route360.net/na_northeast/v1/polygon?cfg={'sources':[{'lat':36.153980,'lng':-95.79743364,'id':'Mappy','tm':{'car':{}}}],'polygon':{'serializer':'geojson','srid':'4326','values':[180]}}&key=GYSWOYA0HD8JM1LAJYDX"
 
 		fmt.Println(r360_url)
 		fmt.Println("")
@@ -110,17 +114,27 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			defer response.Body.Close()
 
 			body, err := ioutil.ReadAll(response.Body)
-			if err != nil {}
-			var data map[string]interface{}
+			if err != nil {} 
+			// var data map[string]interface{}
 			fmt.Println("body=====")
 			fmt.Println(string(body))
-			json.Unmarshal([]byte(body), &data)
+			text := string(body)
 
-			fmt.Println("")
-			fmt.Println("data =====")
-			fmt.Println(data["data"])
-			fmt.Println("features====")
-			fmt.Println(data["features"])
+			nGeometry := strings.Index(text, "geometry")
+			fmt.Println(nGeometry)
+			// json.Unmarshal([]byte(body), &data)
+
+			// fmt.Println("")
+			// fmt.Println("data =====")
+			// fmt.Println(data["data"])
+			// fmt.Println("features====")
+			// fmt.Println(data["features"])
+
+			// var f interface{}
+			// json.Unmarshal(body, &f)
+			// m := f.(map[string]interface{})
+			// fmt.Println("m =====")
+			// fmt.Println(m)
 
 			// fmt.Println("s =====")
 			// s := string([]byte(body)[:])
