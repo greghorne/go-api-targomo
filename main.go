@@ -34,6 +34,9 @@ func v1TargomoIsochrone (w http.ResponseWriter, r *http.Request) {
 		jsonResult = map[string]string{"intersects": ""}
 	}
 
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	
 	json.NewEncoder(w).Encode(jsonResult)
 }
 // ============================================================
@@ -100,13 +103,13 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {
 				geojson = ""
-				msg = err.Error()
+				msg     = err.Error()
 			} 
 
 			jsonText := string(body)
 
-			nStart := strings.Index(jsonText, startSearchText) + len(startSearchText)
-			nEnd   := strings.Index(jsonText, endSearchText)
+			nStart  := strings.Index(jsonText, startSearchText) + len(startSearchText)
+			nEnd    := strings.Index(jsonText, endSearchText)
 
 			geojson = jsonText[nStart:nEnd]
 		} 
