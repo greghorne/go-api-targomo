@@ -13,10 +13,13 @@ import (
 
 // ============================================================
 func main() {
-	
+
+	fmt.Println("main started")
+
 	router := mux.NewRouter()
 	router.HandleFunc("/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}", v1TargomoIsochrone).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8001", router))
+
 }
 // ============================================================
 
@@ -36,7 +39,7 @@ func v1TargomoIsochrone (w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	
+
 	json.NewEncoder(w).Encode(jsonResult)
 }
 // ============================================================
@@ -89,7 +92,8 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			",'id':'Mappy','tm':{'car':{}}}],'polygon':" +
 			"{'serializer':'geojson','srid':'4326'," +
 			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + sKey
-		
+
+	
 		startSearchText := "geometry\":"
 		endSearchText   := ",\"properties\":{\"time\""
 
@@ -107,7 +111,7 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			} 
 
 			jsonText := string(body)
-
+fmt.Println(jsonText)
 			nStart  := strings.Index(jsonText, startSearchText) + len(startSearchText)
 			nEnd    := strings.Index(jsonText, endSearchText)
 
