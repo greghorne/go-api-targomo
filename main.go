@@ -14,8 +14,6 @@ import (
 // ============================================================
 func main() {
 
-	fmt.Println("main started")
-
 	router := mux.NewRouter()
 	router.HandleFunc("/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}", v1TargomoIsochrone).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8001", router))
@@ -111,9 +109,9 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			} 
 
 			jsonText := string(body)
-fmt.Println(jsonText)
-			nStart  := strings.Index(jsonText, startSearchText) + len(startSearchText)
-			nEnd    := strings.Index(jsonText, endSearchText)
+
+			nStart   := strings.Index(jsonText, startSearchText) + len(startSearchText)
+			nEnd     := strings.Index(jsonText, endSearchText)
 
 			geojson = jsonText[nStart:nEnd]
 		} 
