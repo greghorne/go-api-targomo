@@ -1,14 +1,9 @@
 # go-api-targomo
 
-Go: API that handles requests for isochrones from Targomo.com API
+Go: API that handles requests for isochrones from Targomo API.  The returned JSON is ready for use in LeafletJS.com
 
-__*This is a work in progress*__
-
-This is a Golang API that takes care of simple drive-time (isochrone) requests.  
-
-- I will be using this with other projects.  
-- I have no intention on reproducing all of the options available for a Targomo REST API request so the funcitonality will be narrow in scope.
-- The API returns JSON in text format of only the geojson portion of the json that Targomo returns.
+- This was written for using in a different project and the functionality is narrow in scope.
+- The API returns JSON in text format of only the GeoJSON portion of what Targomo returns.
 - API requests are limited to North America.
 
 __*Deployment:*__ *http://zotact1.ddns.net:8001/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}*
