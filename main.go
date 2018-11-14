@@ -32,7 +32,7 @@ func v1TargomoIsochrone (w http.ResponseWriter, r *http.Request) {
 	if isochrone, msg := v1DoTargomoIsochrone(params["lng"], params["lat"], params["time"], params["key"]); msg == "" {
 		jsonResult = map[string]string{"targomo": isochrone}
 	} else {
-		jsonResult = map[string]string{"intersects": ""}
+		jsonResult = map[string]string{"targomo": msg}
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -92,7 +92,7 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + sKey
 
 	
-		startSearchText := "geometry\":"
+		startSearchText := ",\"coordinates\":"
 		endSearchText   := ",\"properties\":{\"time\""
 
 		geojson = ""
@@ -113,7 +113,21 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			nStart   := strings.Index(jsonText, startSearchText) + len(startSearchText)
 			nEnd     := strings.Index(jsonText, endSearchText)
 
-			geojson = jsonText[nStart:nEnd]
+			x := strings.Split(jsonText[nStart:nEnd], ",")
+
+			var s []string
+			var lng string
+			var lat string
+
+			for n := 0; n < len(x); n+=2 {
+				lng = strings.Replace(strings.Replace(x[n], "[", "", -1), "]", "", -1)
+				lat = strings.Replace(strings.Replace(strings.Replace(x[n+1], "[", "", -1), "]", "", -1), "}", "", -1)
+
+				s = append(s, "[" + lat + "," + lng + "]")
+			}
+	
+			geojson = "[" + strings.Join(s, ",") + "]"
+
 		} 
 	
 	} else {
