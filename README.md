@@ -6,7 +6,7 @@ Go: API that handles requests for isochrones from Targomo API.  The returned JSO
 - The API returns JSON that make up the verticies of the isochrone (polygon).
 - API requests are limited to North America.
 
-__*Deployment:*__ *http://192.168.1.100:8001/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}*
+__*Usage:*__ *http://192.168.1.100:8001/v1/targomo-isochrone/{lng}/{lat}/{time}/{key}*
 
 - __*lng*__ => longitude (decimal degrees)
 - __*lat*__ => latitude (decimal degrees)
