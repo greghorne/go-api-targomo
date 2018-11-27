@@ -91,7 +91,6 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			"{'serializer':'geojson','srid':'4326'," +
 			"'values':[" + sTime + "],'buffer':.002,'quadrantSegments':8}}&key=" + sKey
 
-	
 		startSearchText := ",\"coordinates\":"
 		endSearchText   := ",\"properties\":{\"time\""
 
@@ -118,15 +117,19 @@ func v1DoTargomoIsochrone(sxLng string, syLat string, sTime string, sKey string)
 			var s []string
 			var lng string
 			var lat string
+			var prefix int
+			var suffix int
 
 			for n := 0; n < len(x); n+=2 {
-				lng = strings.Replace(strings.Replace(x[n], "[", "", -1), "]", "", -1)
-				lat = strings.Replace(strings.Replace(strings.Replace(x[n+1], "[", "", -1), "]", "", -1), "}", "", -1)
+				prefix = strings.Count(x[n], "[")
+				lat    = strings.Replace(strings.Replace(strings.Replace(x[n+1], "[", "", -1), "]", "", -1), "}", "", -1)
+				lng    = strings.Replace(strings.Replace(x[n], "[", "", -1), "]", "", -1)
+				suffix = strings.Count(x[n+1], "]")
 
-				s = append(s, "[" + lat + "," + lng + "]")
+				s = append(s, strings.Repeat("[", prefix) + lat + "," + lng + strings.Repeat("]", suffix))
 			}
 	
-			geojson = "[" + strings.Join(s, ",") + "]"
+			geojson = strings.Join(s, ",")
 
 		} 
 	
